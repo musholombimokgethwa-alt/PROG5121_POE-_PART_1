@@ -16,7 +16,7 @@ public class ChatApplication {
         
                 System.out.println("==Welcome to chat app ==");
                 System.out.println();
-                System.out.println("==Register==");
+                System.out.println("== Register ==");
                 
                 System.out.println("Enter your name :");
                 user.name = input.nextLine();
@@ -35,5 +35,20 @@ public class ChatApplication {
                 
                 System.out.println();
                 System.out.println(user.registerUser());
+                
+                System.out.println();
+                System.out.println("== Login ==");
+                
+                System.out.println("Enter your username :");
+                user.loginUsername = input.nextLine();
+                
+                System.out.println("Enter your surname :");
+                user.loginPassword = input.nextLine();
+                
+                boolean loginSuccess = user.loginUser();
+                
+                System.out.println(user.returnLoginStatus(loginSuccess));
+                
+               
     }
 }
