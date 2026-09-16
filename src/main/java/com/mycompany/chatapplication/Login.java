@@ -30,4 +30,24 @@ public class Login {
             return phoneNumber.matches("^\\+27\\d{9}$");
         
         }
-}
+        public String registerUser(){
+            if(!checkUserName()){
+                return "Username is not correctly formatted;plase ensure that your"
+                        + "username contains an underscore and is no more than five"
+                        + "characters in length";
+            
+            }
+            if (!checkPasswordComplexity()){
+                return "Password is not correctly formatted plase ensure that the password"
+                        + "contains at least eight characters,a capital letter, a number, "
+                        + "and a special character";
+            }
+            if (!checkCellPhoneNumber()){
+                return"Cell phone number is incorrectly formatted or does not contain the international"
+                        + "code";
+            }
+          
+            return "Username successfully captured."
+                    +"Password successfully captured."
+                    +"Cell phone number successfully added";
+} }
