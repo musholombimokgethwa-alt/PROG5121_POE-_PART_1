@@ -26,4 +26,8 @@ public class Login {
                    password.matches(".*[^a-zA-Z0-9].*");
         
         }
+        public boolean checkCellPhoneNumber(){
+            return phoneNumber.matches("^\\+27\\d{9}$");
+        
+        }
 }
