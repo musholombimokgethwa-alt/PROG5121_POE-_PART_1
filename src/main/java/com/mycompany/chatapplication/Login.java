@@ -19,4 +19,11 @@ public class Login {
             return username.contains("_")&& username.length()<=5;
             
         }
+        public boolean checkPasswordComplexity(){
+            return password.length() >=8 &&
+                   password.matches(".*[A-Z].*")&&
+                   password.matches(".*[0-9].*")&&
+                   password.matches(".*[^a-zA-Z0-9].*");
+        
+        }
 }
