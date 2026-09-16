@@ -3,7 +3,7 @@
  */
 
 package com.mycompany.chatapplication;
-
+import java.util.Scanner;
 /**
  *
  * @author musho
@@ -11,6 +11,29 @@ package com.mycompany.chatapplication;
 public class ChatApplication {
 
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+                Login user = new Login();
         
+                System.out.println("==Welcome to chat app ==");
+                System.out.println();
+                System.out.println("==Register==");
+                
+                System.out.println("Enter your name :");
+                user.name = input.nextLine();
+                
+                System.out.println("Enter your surname :");
+                user.surname = input.nextLine();
+                
+                System.out.println("Enter your username :");
+                user.username = input.nextLine();
+                
+                System.out.println("Create your password :");
+                user.password = input.nextLine();
+                
+                System.out.println("Enter your south african cellphone number: (NB:start with +27)");
+                user.phoneNumber = input.nextLine();
+                
+                System.out.println();
+                System.out.println(user.registerUser());
     }
 }
