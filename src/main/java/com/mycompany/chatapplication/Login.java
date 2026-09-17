@@ -35,7 +35,7 @@ public class Login {
         }
         public String registerUser(){
             if(!checkUserName()){
-                return "Username is not correctly formatted;please ensure that your "
+                return "Username is not correctly formatted; please ensure that your "
                         + "username contains an underscore and is no more than five "
                         + "characters in length";
             
@@ -50,8 +50,8 @@ public class Login {
                         + "code";
             }
           
-            return "Username successfully captured."
-                    +"Password successfully captured."
+            return "Username successfully captured. "
+                    +"Password successfully captured. "
                     +"Cell phone number successfully added";
 
         }
