@@ -42,7 +42,7 @@ public class ChatApplication {
                 System.out.println("Enter your username :");
                 user.loginUsername = input.nextLine();
                 
-                System.out.println("Enter your surname :");
+                System.out.println("Enter your password :");
                 user.loginPassword = input.nextLine();
                 
                 boolean loginSuccess = user.loginUser();
