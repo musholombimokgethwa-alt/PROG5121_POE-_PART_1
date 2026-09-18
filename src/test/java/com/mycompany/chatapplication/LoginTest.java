@@ -16,7 +16,7 @@ public class LoginTest {
     
     public LoginTest() {
     }
- @Test
+  @Test
     public void testUsernameCorrectlyFormatted() {
         Login user = new Login();
 
@@ -25,14 +25,14 @@ public class LoginTest {
         user.phoneNumber = "+27838968975";
 
         assertEquals(
-                "Username successfully captured."
-                + "Password successfully captured."
+                "Username successfully captured. "
+                + "Password successfully captured. "
                 + "Cell phone number successfully added",
                 user.registerUser()
         );
     }
 
-    @Test
+     @Test
     public void testUsernameIncorrectlyFormatted() {
         Login user = new Login();
 
@@ -41,7 +41,7 @@ public class LoginTest {
         user.phoneNumber = "+27838968975";
 
         assertEquals(
-                "Username is not correctly formatted;please ensure that your "
+                "Username is not correctly formatted; please ensure that your "
                 + "username contains an underscore and is no more than five "
                 + "characters in length",
                 user.registerUser()
@@ -57,8 +57,8 @@ public class LoginTest {
         user.phoneNumber = "+27838968975";
 
         assertEquals(
-                "Username successfully captured."
-                + "Password successfully captured."
+                "Username successfully captured. "
+                + "Password successfully captured. "
                 + "Cell phone number successfully added",
                 user.registerUser()
         );
@@ -89,8 +89,8 @@ public class LoginTest {
         user.phoneNumber = "+27838968975";
 
         assertEquals(
-                "Username successfully captured."
-                + "Password successfully captured."
+                "Username successfully captured. "
+                + "Password successfully captured. "
                 + "Cell phone number successfully added",
                 user.registerUser()
         );
