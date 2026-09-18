@@ -9,13 +9,13 @@ package com.mycompany.chatapplication;
  * @author musho
  */
 public class Login {
-        String username;
-        String password;
-        String phoneNumber;
-        String name;
-        String surname;
-        String loginUsername;
-        String loginPassword;
+    public String username;
+    public String password;
+    public String phoneNumber;
+    public String name;
+    public String surname;
+    public String loginUsername;
+    public String loginPassword;
         
         public boolean checkUserName(){
             return username.contains("_")&& username.length()<=5;
