@@ -13,6 +13,8 @@ public class Message {
     private String recipientCell;
     private String message;
     private String messageHash;
+    private static int totalMessages = 0;
+
     
     public Message(String messageID,String recipientCell,String message){
         this.messageID = messageID;
@@ -71,6 +73,10 @@ public class Message {
                 + "\nMessage Hash: " + messageHash
                 + "\nRecipient: " + recipientCell
                 + "\nMessage: " + message;
+    }
+    
+    public int returnTotalMessagess() {
+        return totalMessages;
     }
 
 }
