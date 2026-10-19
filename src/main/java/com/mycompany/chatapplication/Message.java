@@ -65,5 +65,12 @@ public class Message {
             return "Invalid option";
         }
     }
+    
+    public String printMessages() {
+        return "Message ID: " + messageID
+                + "\nMessage Hash: " + messageHash
+                + "\nRecipient: " + recipientCell
+                + "\nMessage: " + message;
+    }
 
 }
