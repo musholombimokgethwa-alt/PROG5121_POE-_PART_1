@@ -22,5 +22,15 @@ public class Message {
     public boolean checkMessageID(){
         return messageID.length() <=10;
     }
+   
+    public String checkRecipientCell() {
+        if (recipientCell.length() <= 10
+                && recipientCell.startsWith("+")) {
+            return "Valid recipient number";
+        } else {
+            return "Invalid recipient number";
+        }
+    }
+
     
 }
