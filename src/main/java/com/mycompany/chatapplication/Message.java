@@ -83,55 +83,56 @@ public class Message {
    
     
     public String storeMessage() {
-        try {
-            java.io.File file = new java.io.File("messages.json");
-            java.util.Scanner reader = new java.util.Scanner(file);
-            String oldMessages = "";
+            try {
+                java.io.File file = new java.io.File("messages.json");
+                String oldMessages = "";
 
-            while (reader.hasNextLine()) {
-                oldMessages += reader.nextLine() + "\n";
-            }
-            reader.close();
+                if (file.exists()) {
+                    java.util.Scanner reader = new java.util.Scanner(file);
 
-            String newMessage = """
-                                
-                                ----------------------------------
-                                          MESSAGE DETAILS
-                                ----------------------------------
-                                Message ID: """ + messageID
-            + "\nMessage Hash: " + messageHash
-            + "\nRecipient: " + recipientCell
-            + "\nMessage: " + message
-            + "\n----------------------------------";
+                    while (reader.hasNextLine()) {
+                        oldMessages += reader.nextLine() + "\n";
+                    }
 
-            if (oldMessages.trim().equals("")
-                    || oldMessages.trim().equals("[]")) {
-                oldMessages = "[\n" + newMessage + "\n]";
-            } else {
-                oldMessages = oldMessages.trim();
-                oldMessages = oldMessages.substring(
-                        0, oldMessages.lastIndexOf("]"));
-
-                if (oldMessages.trim().endsWith("}")) {
-                    oldMessages += ",\n";
+                    reader.close();
                 }
 
-                oldMessages += newMessage + "\n]";
+                String newMessage = "  {\n"
+                        + "    \"messageID\": \"" + messageID + "\",\n"
+                        + "    \"messageHash\": \"" + messageHash + "\",\n"
+                        + "    \"recipient\": \"" + recipientCell + "\",\n"
+                        + "    \"message\": \"" + message + "\"\n"
+                        + "  }";
+
+                if (oldMessages.trim().isEmpty()
+                        || oldMessages.trim().equals("[]")) {
+                    oldMessages = "[\n" + newMessage + "\n]";
+                } else if (oldMessages.trim().endsWith("]")) {
+                    oldMessages = oldMessages.trim();
+                    oldMessages = oldMessages.substring(
+                            0, oldMessages.lastIndexOf("]"));
+
+                    if (!oldMessages.trim().equals("[")) {
+                        oldMessages += ",\n";
+                    }
+
+                    oldMessages += newMessage + "\n]";
+                } else {
+                    return "Error: messages.json is not a valid JSON array.";
+                }
+
+                java.io.FileWriter writer = new java.io.FileWriter(file);
+                writer.write(oldMessages);
+                writer.close();
+
+                return "Message successfully stored.";
+
+            } catch (java.io.IOException e) {
+                return "Error storing message.";
             }
-
-            java.io.FileWriter writer =
-                    new java.io.FileWriter(file);
-
-            writer.write(oldMessages);
-            writer.close();
-
-            return "Message successfully stored.";
-
-        } catch (java.io.IOException e) {
-            return "Error storing message.";
-        }
-    }
-
-
+            }
 }
+
+
+
 
