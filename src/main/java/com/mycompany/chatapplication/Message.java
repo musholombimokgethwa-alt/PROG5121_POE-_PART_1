@@ -11,7 +11,13 @@ package com.mycompany.chatapplication;
 public class Message {
     private String messageID;
     private String recipientCell;
-    private String messsage;
+    private String message;
     private String messageHash;
+    
+    public Message(String messageID,String recipientCell,String message){
+        this.messageID = messageID;
+        this.recipientCell = recipientCell;
+        this.message = message;
+    }
     
 }
