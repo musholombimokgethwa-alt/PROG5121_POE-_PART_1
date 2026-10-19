@@ -38,12 +38,32 @@ public class Message {
         String lastWord =words [words.length - 1];
         
         messageHash = messageID.substring(0,2)
-                +";"+messageNumber
+                +":"+messageNumber
                 +":"+firstWord +lastWord;
         
         return messageHash.toUpperCase();
         
     }
     
-    
+    public String SentMessage() {
+        java.util.Scanner input = new java.util.Scanner(System.in);
+
+        System.out.println("Choose an option:");
+        System.out.println("1. Send Message");
+        System.out.println("2. Disregard Message");
+        System.out.println("3. Store Message to send later");
+
+        String choice = input.nextLine();
+
+        if (choice.equals("1")) {
+            return "Message successfully sent";
+        } else if (choice.equals("2")) {
+            return "Press D to delete the message";
+        } else if (choice.equals("3")) {
+            return "Message successfully stored";
+        } else {
+            return "Invalid option";
+        }
+    }
+
 }
