@@ -20,19 +20,21 @@ public class Message {
         this.messageID = messageID;
         this.recipientCell = recipientCell;
         this.message = message;
+        totalMessages++;
     }
     public boolean checkMessageID(){
         return messageID.length() <=10;
     }
    
+   
     public String checkRecipientCell() {
-        if (recipientCell.length() <= 10
-                && recipientCell.startsWith("+")) {
+        if (recipientCell.matches("^\\+27\\d{9}$")) {
             return "Valid recipient number";
         } else {
             return "Invalid recipient number";
         }
     }
+
     public String createMessageHash(int messageNumber){
         String[]words = message.trim().split("\\s+");
         
@@ -78,5 +80,58 @@ public class Message {
     public int returnTotalMessagess() {
         return totalMessages;
     }
+   
+    
+    public String storeMessage() {
+        try {
+            java.io.File file = new java.io.File("messages.json");
+            java.util.Scanner reader = new java.util.Scanner(file);
+            String oldMessages = "";
+
+            while (reader.hasNextLine()) {
+                oldMessages += reader.nextLine() + "\n";
+            }
+            reader.close();
+
+            String newMessage = """
+                                
+                                ----------------------------------
+                                          MESSAGE DETAILS
+                                ----------------------------------
+                                Message ID: """ + messageID
+            + "\nMessage Hash: " + messageHash
+            + "\nRecipient: " + recipientCell
+            + "\nMessage: " + message
+            + "\n----------------------------------";
+
+            if (oldMessages.trim().equals("")
+                    || oldMessages.trim().equals("[]")) {
+                oldMessages = "[\n" + newMessage + "\n]";
+            } else {
+                oldMessages = oldMessages.trim();
+                oldMessages = oldMessages.substring(
+                        0, oldMessages.lastIndexOf("]"));
+
+                if (oldMessages.trim().endsWith("}")) {
+                    oldMessages += ",\n";
+                }
+
+                oldMessages += newMessage + "\n]";
+            }
+
+            java.io.FileWriter writer =
+                    new java.io.FileWriter(file);
+
+            writer.write(oldMessages);
+            writer.close();
+
+            return "Message successfully stored.";
+
+        } catch (java.io.IOException e) {
+            return "Error storing message.";
+        }
+    }
+
 
 }
+
