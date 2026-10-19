@@ -19,5 +19,8 @@ public class Message {
         this.recipientCell = recipientCell;
         this.message = message;
     }
+    public boolean checkMessageID(){
+        return messageID.length() <=10;
+    }
     
 }
