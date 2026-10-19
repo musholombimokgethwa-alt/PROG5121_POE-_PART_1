@@ -9,5 +9,9 @@ package com.mycompany.chatapplication;
  * @author musho
  */
 public class Message {
+    private String messageID;
+    private String recipientCell;
+    private String messsage;
+    private String messageHash;
     
 }
