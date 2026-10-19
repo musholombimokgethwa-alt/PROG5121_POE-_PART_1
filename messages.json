@@ -1,0 +1,22 @@
+[
+  {
+    "messageID": "9781788433",
+    "messageHash": "97:1:+27839876543+27839876543",
+    "recipient": "",
+    "message": "+27839876543"
+  }
+,
+  {
+    "messageID": "3678259023",
+    "messageHash": "36:1:HELLOAPP",
+    "recipient": "+27821234567",
+    "message": "HELLO WELCOME TO CHAT APP"
+  }
+,
+  {
+    "messageID": "5103447958",
+    "messageHash": "51:2:awezawez",
+    "recipient": "+27839876543",
+    "message": "awez"
+  }
+]
