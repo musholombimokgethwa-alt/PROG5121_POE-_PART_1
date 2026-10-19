@@ -31,6 +31,19 @@ public class Message {
             return "Invalid recipient number";
         }
     }
-
+    public String createMessageHash(int messageNumber){
+        String[]words = message.trim().split("\\s+");
+        
+        String firstWord =words[0];
+        String lastWord =words [words.length - 1];
+        
+        messageHash = messageID.substring(0,2)
+                +";"+messageNumber
+                +":"+firstWord +lastWord;
+        
+        return messageHash.toUpperCase();
+        
+    }
+    
     
 }
