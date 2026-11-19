@@ -14,39 +14,42 @@ public class Message {
     private String message;
     private String messageHash;
     private static int totalMessages = 0;
-
+    private boolean sent = false;
     
     public Message(String messageID,String recipientCell,String message){
         this.messageID = messageID;
         this.recipientCell = recipientCell;
         this.message = message;
-        totalMessages++;
+       
     }
     public boolean checkMessageID(){
         return messageID.length() <=10;
     }
+    public boolean checkMessageLength() {
+        return message.length() < 250;
+}
    
    
     public String checkRecipientCell() {
         if (recipientCell.matches("^\\+27\\d{9}$")) {
-            return "Valid recipient number";
+            return "Cell phone number successfully captured";
         } else {
-            return "Invalid recipient number";
+            return "Invalid phone number.Please try again.";
         }
     }
 
-    public String createMessageHash(int messageNumber){
-        String[]words = message.trim().split("\\s+");
-        
-        String firstWord =words[0];
-        String lastWord =words [words.length - 1];
-        
-        messageHash = messageID.substring(0,2)
-                +":"+messageNumber
-                +":"+firstWord +lastWord;
-        
-        return messageHash.toUpperCase();
-        
+    public String createMessageHash(int messageNumber) {
+        String[] words = message.trim().split("\\s+");
+
+        String firstWord = words[0].replaceAll("[^a-zA-Z0-9]", "");
+        String lastWord = words[words.length - 1].replaceAll("[^a-zA-Z0-9]", "");
+        messageHash = messageID.substring(0, 2)
+                + ":" + messageNumber
+                + ":" + firstWord + lastWord;
+
+        messageHash = messageHash.toUpperCase();
+
+        return messageHash;
     }
     
     public String SentMessage() {
@@ -60,13 +63,18 @@ public class Message {
         String choice = input.nextLine();
 
         if (choice.equals("1")) {
-            return "Message successfully sent";
+            
+            if(!sent){
+                totalMessages++;
+                sent = true;
+            }
+            return "Message successfully sent.";
         } else if (choice.equals("2")) {
-            return "Press D to delete the message";
+            return "Press 0 to delete the message.";
         } else if (choice.equals("3")) {
-            return "Message successfully stored";
+            return "Message successfully stored.";
         } else {
-            return "Invalid option";
+            return "Invalid option.";
         }
     }
     
