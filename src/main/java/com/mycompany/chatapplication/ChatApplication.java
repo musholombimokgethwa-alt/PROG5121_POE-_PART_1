@@ -13,6 +13,7 @@ public class ChatApplication {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
                 Login user = new Login();
+                MessageStore messageStore = new MessageStore();
         
                 System.out.println("==Welcome to chat app ==");
                 System.out.println();
@@ -50,7 +51,8 @@ public class ChatApplication {
                 System.out.println(user.returnLoginStatus(loginSuccess));
                 
                  if (loginSuccess) {
-                System.out.println("==Welcome to QuickChat!==");
+                     messageStore.loadStoredFromJson("messages.json");
+                    System.out.println("==Welcome to QuickChat!==");
 
                 int choice = 0;
 
@@ -103,8 +105,8 @@ public class ChatApplication {
                             
 
                     Message newMessage =
-                            new Message(messageID, recipient, text);
-
+                        new Message(messageID, recipient, text,
+                                user.name + " " + user.surname);
                     
 
                     newMessage.createMessageHash(i + 1);
@@ -112,12 +114,15 @@ public class ChatApplication {
                     String result = newMessage.SentMessage();
                     System.out.println(result);
 
-                    if (result.equals("Message successfully stored")) {
+                    if (result.equals("Message successfully stored.")) {
                         System.out.println(newMessage.storeMessage());
+                        messageStore.recordMessage(newMessage, "Stored");
                     } else if (result.equals("Message successfully sent")) {
                         System.out.println(newMessage.printMessages());
-                    } else if (result.equals("Press D to delete the message")) {
+                        messageStore.recordMessage(newMessage, "Sent");
+                    } else if (result.equals("Press 0 to delete the message")) {
                         System.out.println("Message disregarded.");
+                        messageStore.recordMessage(newMessage, "Disregarded"); 
                     }
                 }
             }
