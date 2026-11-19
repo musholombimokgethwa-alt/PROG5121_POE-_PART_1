@@ -4,6 +4,12 @@
  */
 package com.mycompany.chatapplication;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 /**
  *
  * @author musho
@@ -25,19 +31,69 @@ public class MessageStore {
     
         public void recordMessage(Message message, String status) {
 
+            boolean validStatus = false;
+
             if (status.equals("Sent") && sentCount < MAX_MESSAGES) {
                 sentMessages[sentCount] = message.getMessage();
                 sentCount++;
+                validStatus = true;
 
             } else if (status.equals("Disregarded")
                     && disregardedCount < MAX_MESSAGES) {
                 disregardedMessages[disregardedCount] = message.getMessage();
                 disregardedCount++;
+                validStatus = true;
 
             } else if (status.equals("Stored")
                     && storedCount < MAX_MESSAGES) {
                 storedMessages[storedCount] = message.getMessage();
                 storedCount++;
+                validStatus = true;
+            }
+
+            if (validStatus && messageCount < MAX_MESSAGES) {
+                messageHashes[messageCount] = message.getMessageHash();
+                messageIDs[messageCount] = message.getMessageID();
+                messageContents[messageCount] = message.getMessage();
+
+                messageCount++;
             }
         }
+        
+        public String loadStoredFromJson(String fileName) {
+
+            Gson gson = new Gson();
+            int loaded = 0;
+
+            try {
+                List<String> lines = Files.readAllLines(Paths.get(fileName));
+
+                for (int i = 0; i < lines.size(); i++) {
+
+                    String line = lines.get(i).trim();
+
+                    if (line.startsWith("{") && storedCount < MAX_MESSAGES) {
+
+                        Message message = gson.fromJson(line, Message.class);
+
+                        storedMessages[storedCount] = message.getMessage();
+                        storedCount++;
+
+                        messageHashes[messageCount] = message.getMessageHash();
+                        messageIDs[messageCount] = message.getMessageID();
+                        messageContents[messageCount] = message.getMessage();
+
+                        messageCount++;
+                        loaded++;
+                    }
+                }
+
+                return loaded + " stored message(s) loaded from " + fileName;
+
+            } catch (IOException e) {
+                return "No stored messages found.";
+            }
+        }
+
+        
 }
