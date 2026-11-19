@@ -5,6 +5,9 @@
 package com.mycompany.chatapplication;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,10 +27,14 @@ public class MessageStore {
     private String[] messageIDs = new String[MAX_MESSAGES];
     private String[] messageContents = new String[MAX_MESSAGES];
     
+    private String[] storedSenders = new String[MAX_MESSAGES];
+    private String[] storedRecipients = new String[MAX_MESSAGES];
+    
     private int sentCount = 0;
     private int disregardedCount = 0;
     private int storedCount = 0;
     private int messageCount = 0;
+   
     
         public void recordMessage(Message message, String status) {
 
@@ -47,9 +54,12 @@ public class MessageStore {
             } else if (status.equals("Stored")
                     && storedCount < MAX_MESSAGES) {
                 storedMessages[storedCount] = message.getMessage();
+                storedSenders[storedCount] = message.getSender();
+                storedRecipients[storedCount] = message.getRecipientCell();
+
                 storedCount++;
                 validStatus = true;
-            }
+        }
 
             if (validStatus && messageCount < MAX_MESSAGES) {
                 messageHashes[messageCount] = message.getMessageHash();
@@ -66,34 +76,63 @@ public class MessageStore {
             int loaded = 0;
 
             try {
-                List<String> lines = Files.readAllLines(Paths.get(fileName));
+                String jsonText = Files.readString(Paths.get(fileName));
 
-                for (int i = 0; i < lines.size(); i++) {
+                JsonArray jsonMessages = JsonParser.parseString(jsonText)
+                        .getAsJsonArray();
 
-                    String line = lines.get(i).trim();
+                for (int i = 0; i < jsonMessages.size(); i++) {
 
-                    if (line.startsWith("{") && storedCount < MAX_MESSAGES) {
+                    JsonObject jsonMessage = jsonMessages.get(i)
+                            .getAsJsonObject();
 
-                        Message message = gson.fromJson(line, Message.class);
+                    if (storedCount < MAX_MESSAGES
+                            && messageCount < MAX_MESSAGES) {
 
-                        storedMessages[storedCount] = message.getMessage();
+                        String messageID = jsonMessage.get("messageID").getAsString();
+                        String messageHash = jsonMessage.get("messageHash").getAsString();
+                        String recipient = jsonMessage.get("recipient").getAsString();
+                        storedRecipients[storedCount] = recipient;
+                        
+                        String sender = jsonMessage.has("sender")
+                                ? jsonMessage.get("sender").getAsString()
+                                : "Unknown";
+
+                        storedSenders[storedCount] = sender;
+                        String content = jsonMessage.get("message").getAsString();
+
+                        storedMessages[storedCount] = content;
                         storedCount++;
 
-                        messageHashes[messageCount] = message.getMessageHash();
-                        messageIDs[messageCount] = message.getMessageID();
-                        messageContents[messageCount] = message.getMessage();
+                        messageIDs[messageCount] = messageID;
+                        messageHashes[messageCount] = messageHash;
+                        messageContents[messageCount] = content;
 
                         messageCount++;
                         loaded++;
                     }
                 }
 
-                return loaded + " stored message(s) loaded from " + fileName;
+                return loaded + " stored message(s) loaded.";
 
             } catch (IOException e) {
                 return "No stored messages found.";
             }
         }
+        
+        public void displayStoredSendersAndRecipients() {
 
+            if (storedCount == 0) {
+                System.out.println("No stored messages found.");
+                return;
+            }
+
+            for (int i = 0; i < storedCount; i++) {
+                System.out.println("Sender: " + storedSenders[i]);
+                System.out.println("Recipient: " + storedRecipients[i]);
+                System.out.println("-------------------------");
+            }
+        }
+        
         
 }
