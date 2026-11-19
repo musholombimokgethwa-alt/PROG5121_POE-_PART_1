@@ -30,6 +30,9 @@ public class MessageStore {
     private String[] storedSenders = new String[MAX_MESSAGES];
     private String[] storedRecipients = new String[MAX_MESSAGES];
     
+    private String[] storedMessageIDs = new String[MAX_MESSAGES];
+    private String[] storedMessageHashes = new String[MAX_MESSAGES];
+    
     private int sentCount = 0;
     private int disregardedCount = 0;
     private int storedCount = 0;
@@ -56,7 +59,8 @@ public class MessageStore {
                 storedMessages[storedCount] = message.getMessage();
                 storedSenders[storedCount] = message.getSender();
                 storedRecipients[storedCount] = message.getRecipientCell();
-
+                storedMessageIDs[storedCount] = message.getMessageID();
+                storedMessageHashes[storedCount] = message.getMessageHash();
                 storedCount++;
                 validStatus = true;
         }
@@ -91,6 +95,8 @@ public class MessageStore {
 
                         String messageID = jsonMessage.get("messageID").getAsString();
                         String messageHash = jsonMessage.get("messageHash").getAsString();
+                        storedMessageIDs[storedCount] = messageID;
+                        storedMessageHashes[storedCount] = messageHash;
                         String recipient = jsonMessage.get("recipient").getAsString();
                         storedRecipients[storedCount] = recipient;
                         
@@ -120,19 +126,123 @@ public class MessageStore {
             }
         }
         
-        public void displayStoredSendersAndRecipients() {
+        public String displayStoredSendersAndRecipients() {
 
             if (storedCount == 0) {
-                System.out.println("No stored messages found.");
-                return;
+                return "No stored messages found.";
             }
 
+            String result = "";
+
             for (int i = 0; i < storedCount; i++) {
-                System.out.println("Sender: " + storedSenders[i]);
-                System.out.println("Recipient: " + storedRecipients[i]);
-                System.out.println("-------------------------");
+                result = result + "Sender: " + storedSenders[i]
+                        + " | Recipient: " + storedRecipients[i] + "\n";
             }
+
+            return result;
+        }
+        public String longestStoredMessage() {
+
+            if (storedCount == 0) {
+                return "No stored messages found.";
+            }
+
+            String longest = storedMessages[0];
+
+            for (int i = 1; i < storedCount; i++) {
+
+                if (storedMessages[i].length() > longest.length()) {
+                    longest = storedMessages[i];
+                }
+            }
+
+            return longest;
         }
         
-        
+        public String searchByMessageID(String id) {
+
+            for (int i = 0; i < storedCount; i++) {
+
+                if (storedMessageIDs[i].equals(id)) {
+                    return "Recipient: " + storedRecipients[i]
+                            + "\nMessage: " + storedMessages[i];
+                }
+            }
+
+            return "Message " + id + " not found.";
+        }
+        public String searchByRecipient(String recipient) {
+
+            String result = "";
+
+            for (int i = 0; i < storedCount; i++) {
+
+                if (storedRecipients[i].equals(recipient)) {
+                    result = result + storedMessages[i] + "\n";
+                }
+            }
+
+            if (result.equals("")) {
+                return "No messages found for recipient " + recipient + ".";
+            }
+
+            return result;
+        }
+        public String deleteByMessageHash(String hash) {
+
+            int deleteIndex = -1;
+
+            for (int i = 0; i < storedCount; i++) {
+                if (storedMessageHashes[i].equals(hash)) {
+                    deleteIndex = i;
+                    break;
+                }
+            }
+
+            if (deleteIndex == -1) {
+                return "Message hash " + hash + " not found.";
+            }
+
+            String deleted = storedMessages[deleteIndex];
+
+            for (int i = deleteIndex; i < storedCount - 1; i++) {
+                storedMessages[i] = storedMessages[i + 1];
+                storedSenders[i] = storedSenders[i + 1];
+                storedRecipients[i] = storedRecipients[i + 1];
+                storedMessageIDs[i] = storedMessageIDs[i + 1];
+                storedMessageHashes[i] = storedMessageHashes[i + 1];
+            }
+
+            storedMessages[storedCount - 1] = null;
+            storedSenders[storedCount - 1] = null;
+            storedRecipients[storedCount - 1] = null;
+            storedMessageIDs[storedCount - 1] = null;
+            storedMessageHashes[storedCount - 1] = null;
+
+            storedCount--;
+
+            return "Message \"" + deleted + "\" deleted.";
+        }
+        public String reportStoredMessages() {
+
+            if (storedCount == 0) {
+                return "No stored messages found.";
+            }
+
+            String result = "STORED MESSAGES REPORT\n";
+
+            for (int i = 0; i < storedCount; i++) {
+
+                result = result + "----------\n"
+                        + "Message ID: " + storedMessageIDs[i] + "\n"
+                        + "Message Hash: " + storedMessageHashes[i] + "\n"
+                        + "Sender: " + storedSenders[i] + "\n"
+                        + "Recipient: " + storedRecipients[i] + "\n"
+                        + "Message: " + storedMessages[i] + "\n";
+            }
+
+            result = result + "----------\nTotal stored messages: " + storedCount;
+
+            return result;
+        }
 }
