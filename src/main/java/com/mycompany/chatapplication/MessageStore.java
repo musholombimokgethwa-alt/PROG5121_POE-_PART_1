@@ -22,4 +22,22 @@ public class MessageStore {
     private int disregardedCount = 0;
     private int storedCount = 0;
     private int messageCount = 0;
+    
+        public void recordMessage(Message message, String status) {
+
+            if (status.equals("Sent") && sentCount < MAX_MESSAGES) {
+                sentMessages[sentCount] = message.getMessage();
+                sentCount++;
+
+            } else if (status.equals("Disregarded")
+                    && disregardedCount < MAX_MESSAGES) {
+                disregardedMessages[disregardedCount] = message.getMessage();
+                disregardedCount++;
+
+            } else if (status.equals("Stored")
+                    && storedCount < MAX_MESSAGES) {
+                storedMessages[storedCount] = message.getMessage();
+                storedCount++;
+            }
+        }
 }
