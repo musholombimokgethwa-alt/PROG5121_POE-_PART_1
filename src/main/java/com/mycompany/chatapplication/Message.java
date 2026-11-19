@@ -15,12 +15,19 @@ public class Message {
     private String messageHash;
     private static int totalMessages = 0;
     private boolean sent = false;
+    private String sender;
     
-    public Message(String messageID,String recipientCell,String message){
+    public Message(String messageID, String recipientCell, String message) {
+    this.messageID = messageID;
+    this.recipientCell = recipientCell;
+    this.message = message;
+}
+    
+    public Message(String messageID,String recipientCell,String message,String sender){
         this.messageID = messageID;
         this.recipientCell = recipientCell;
         this.message = message;
-       
+        this.sender = sender;
     }
     public boolean checkMessageID(){
         return messageID.length() <=10;
@@ -28,6 +35,7 @@ public class Message {
     public boolean checkMessageLength() {
         return message.length() < 250;
 }
+    
    
    
     public String checkRecipientCell() {
@@ -81,6 +89,7 @@ public class Message {
     public String printMessages() {
         return "Message ID: " + messageID
                 + "\nMessage Hash: " + messageHash
+                + "\"sender\": \"" + sender + "\",\n"
                 + "\nRecipient: " + recipientCell
                 + "\nMessage: " + message;
     }
@@ -108,6 +117,7 @@ public class Message {
                 String newMessage = "  {\n"
                         + "    \"messageID\": \"" + messageID + "\",\n"
                         + "    \"messageHash\": \"" + messageHash + "\",\n"
+                        + "    \"sender\": \"" + sender + "\",\n"
                         + "    \"recipient\": \"" + recipientCell + "\",\n"
                         + "    \"message\": \"" + message + "\"\n"
                         + "  }";
@@ -155,5 +165,7 @@ public class Message {
             public String getMessageHash() {
                 return messageHash;
             }
-
+            public String getSender() {
+                return sender;
+}
 }
