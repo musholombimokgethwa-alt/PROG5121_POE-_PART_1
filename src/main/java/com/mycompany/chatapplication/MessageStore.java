@@ -17,4 +17,9 @@ public class MessageStore {
     private String[] messageHashes = new String[MAX_MESSAGES];
     private String[] messageIDs = new String[MAX_MESSAGES];
     private String[] messageContents = new String[MAX_MESSAGES];
+    
+    private int sentCount = 0;
+    private int disregardedCount = 0;
+    private int storedCount = 0;
+    private int messageCount = 0;
 }
