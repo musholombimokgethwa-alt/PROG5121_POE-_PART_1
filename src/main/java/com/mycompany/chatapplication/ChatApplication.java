@@ -50,7 +50,7 @@ public class ChatApplication {
                 System.out.println(user.returnLoginStatus(loginSuccess));
                 
                  if (loginSuccess) {
-                System.out.println("==Welcome to ChatApp!==");
+                System.out.println("==Welcome to QuickChat!==");
 
                 int choice = 0;
 
@@ -76,11 +76,17 @@ public class ChatApplication {
                     System.out.println("==================================");
                     System.out.println("          MESSAGE " + (i + 1));
                     System.out.println("==================================");
+            
+                String recipient;
+                do {
+                    System.out.println("Enter recipient cellphone number (+27):");
+                    recipient = input.nextLine();
 
-                    System.out.println("Enter recipient cellphone number:");
+                    Message checkNumber = new Message("00", recipient, "");
 
-                    String recipient = input.nextLine();
+                    System.out.println(checkNumber.checkRecipientCell());
 
+                } while (!recipient.matches("^\\+27\\d{9}$"));
                     System.out.println("Enter your message (less than 250 characters):");
                     String text = input.nextLine();
 
@@ -90,13 +96,16 @@ public class ChatApplication {
                         continue;
                     }
 
-                    String messageID = String.format("%010d",
-                            (long) (Math.random() * 10000000000L));
+                    String messageID = "";
+                    for (int j = 0;j< 10;j++){
+                        messageID+=(int)(Math.random()*10);
+                    }
+                            
 
                     Message newMessage =
                             new Message(messageID, recipient, text);
 
-                    System.out.println(newMessage.checkRecipientCell());
+                    
 
                     newMessage.createMessageHash(i + 1);
 
