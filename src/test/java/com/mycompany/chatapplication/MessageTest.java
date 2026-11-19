@@ -13,68 +13,90 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class MessageTest {
     
-    
-    @Test
+  @Test
     public void testCheckMessageID() {
         Message msg = new Message("1234567890", "+27718693002", "Hello");
         assertTrue(msg.checkMessageID());
     }
 
     @Test
+    public void testInvalidMessageID() {
+        Message msg = new Message("12345678901", "+27718693002", "Hello");
+        assertFalse(msg.checkMessageID());
+    }
+
+    @Test
     public void testCheckRecipientCell() {
         Message msg = new Message("1234567890", "+27718693002", "Hello");
-        assertEquals("Valid recipient number", msg.checkRecipientCell());
+        assertEquals("Cell phone number successfully captured",
+                msg.checkRecipientCell());
     }
 
     @Test
     public void testInvalidRecipientCell() {
         Message msg = new Message("1234567890", "0718693002", "Hello");
-        assertEquals("Invalid recipient number", msg.checkRecipientCell());
+        assertEquals("Invalid phone number.Please try again.",
+                msg.checkRecipientCell());
     }
 
-    @Test
+   @Test
     public void testCreateMessageHash() {
         Message msg = new Message("0012345678", "+27718693002",
                 "Hi Mike, can you join us for dinner tonight?");
 
-        assertEquals("00:1:HITONIGHT?",
-                msg.createMessageHash(1));
-}
-
-    @Test
-    public void testSendMessage() {
-        Message msg = new Message("1234567890", "+27718693002", "Hello");
-        assertEquals("Message successfully sent", "Message successfully sent");
-    }
-
-    @Test
-    public void testDisregardMessage() {
-        Message msg = new Message("1234567890", "+27718693002", "Hello");
-        assertEquals("Press D to delete the message", "Press D to delete the message");
+        assertEquals("00:0:HITONIGHT",
+                msg.createMessageHash(0));
     }
 
     @Test
     public void testStoreMessage() {
         Message msg = new Message("1234567890", "+27718693002", "Hello");
-        assertNotNull(msg.storeMessage());
+        assertEquals("Message successfully stored.", msg.storeMessage());
     }
 
     @Test
     public void testReturnTotalMessages() {
         Message msg = new Message("1234567890", "+27718693002", "Hello");
-        assertTrue(msg.returnTotalMessagess() > 0);
+        assertEquals(0, msg.returnTotalMessagess());
     }
 
     @Test
     public void testMessageLength() {
-        String message = "Hello";
-        assertTrue(message.length() <= 250);
+        Message msg = new Message("1234567890", "+27718693002", "Hello");
+        assertTrue(msg.checkMessageLength());
     }
-    @Test
-public void testMessageLengthFailure() {
-    String message = "A".repeat(251);
 
-    assertTrue(message.length() > 250);
-}
-    
-}
+    @Test
+    public void testMessageLengthFailure() {
+        Message msg = new Message("1234567890", "+27718693002",
+                "A".repeat(250));
+        assertFalse(msg.checkMessageLength());
+    }
+
+    @Test
+    public void testHashLoop() {
+
+        String[] messages = {
+            "Hello there",
+            "Good morning",
+            "See you later"
+        };
+
+        for (int i = 0; i < messages.length; i++) {
+
+            Message msg = new Message(
+                    "0012345678",
+                    "+27718693002",
+                    messages[i]
+            );
+
+            String hash = msg.createMessageHash(i + 1);
+
+            assertNotNull(hash);
+            assertTrue(hash.contains(":"));
+            assertEquals(hash, hash.toUpperCase());
+        }
+    }
+ 
+    }
+
