@@ -12,7 +12,6 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 /**
  *
  * @author musho
@@ -32,7 +31,7 @@ public class MessageStore {
     
     private String[] storedMessageIDs = new String[MAX_MESSAGES];
     private String[] storedMessageHashes = new String[MAX_MESSAGES];
-    
+    private String[] messageRecipients = new String[MAX_MESSAGES];
     private int sentCount = 0;
     private int disregardedCount = 0;
     private int storedCount = 0;
@@ -69,11 +68,27 @@ public class MessageStore {
                 messageHashes[messageCount] = message.getMessageHash();
                 messageIDs[messageCount] = message.getMessageID();
                 messageContents[messageCount] = message.getMessage();
-
+                messageRecipients[messageCount] = message.getRecipientCell();
                 messageCount++;
             }
         }
-        
+        // Getter methods used to access sent messages during testing
+        public int getSentCount() {
+                return sentCount;
+            }
+
+            public String getSentMessage(int index) {
+                if (index >= 0 && index < sentCount) {
+                    return sentMessages[index];
+                }
+
+                return null;
+            }
+            // Getter method used to check the number of stored messages
+                public int getStoredCount() {
+                    return storedCount;
+                }
+           // Loads stored messages from the JSON file into the message arrays 
         public String loadStoredFromJson(String fileName) {
 
             Gson gson = new Gson();
@@ -113,7 +128,7 @@ public class MessageStore {
                         messageIDs[messageCount] = messageID;
                         messageHashes[messageCount] = messageHash;
                         messageContents[messageCount] = content;
-
+                        messageRecipients[messageCount] = recipient;
                         messageCount++;
                         loaded++;
                     }
@@ -125,7 +140,7 @@ public class MessageStore {
                 return "No stored messages found.";
             }
         }
-        
+        // Displays the sender and recipient of each stored message
         public String displayStoredSendersAndRecipients() {
 
             if (storedCount == 0) {
@@ -141,6 +156,7 @@ public class MessageStore {
 
             return result;
         }
+        // Finds and returns the longest stored message
         public String longestStoredMessage() {
 
             if (storedCount == 0) {
@@ -158,7 +174,7 @@ public class MessageStore {
 
             return longest;
         }
-        
+        // Searches for a stored message using its message ID
         public String searchByMessageID(String id) {
 
             for (int i = 0; i < storedCount; i++) {
@@ -171,6 +187,7 @@ public class MessageStore {
 
             return "Message " + id + " not found.";
         }
+        // Finds and displays all stored messages for a specific recipient
         public String searchByRecipient(String recipient) {
 
             String result = "";
@@ -188,6 +205,7 @@ public class MessageStore {
 
             return result;
         }
+        // Deletes a stored message using its unique message hash
         public String deleteByMessageHash(String hash) {
 
             int deleteIndex = -1;
@@ -223,6 +241,7 @@ public class MessageStore {
 
             return "Message \"" + deleted + "\" deleted.";
         }
+        // Generates a report containing all stored messages
         public String reportStoredMessages() {
 
             if (storedCount == 0) {
@@ -245,4 +264,25 @@ public class MessageStore {
 
             return result;
         }
+        // Displays a report of all sent messages
+            public String reportSentMessages() {
+
+                if (sentCount == 0) {
+                    return "No sent messages found.";
+                }
+
+                String result = "SENT MESSAGES REPORT\n";
+
+                for (int i = 0; i < sentCount; i++) {
+
+                    result = result + "----------\n"
+                            + "Message Hash: " + messageHashes[i] + "\n"
+                            + "Recipient: " + messageRecipients[i] + "\n"
+                            + "Message: " + sentMessages[i] + "\n";
+                }
+
+                result = result + "----------\nTotal sent messages: " + sentCount;
+
+                return result;
+            }
 }
