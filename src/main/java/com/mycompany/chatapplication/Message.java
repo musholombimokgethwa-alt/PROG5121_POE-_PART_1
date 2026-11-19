@@ -139,8 +139,21 @@ public class Message {
                 return "Error storing message.";
             }
             }
+  
+            public String getMessageID() {
+                return messageID;
+            }
+
+            public String getRecipientCell() {
+                return recipientCell;
+            }
+
+            public String getMessage() {
+                return message;
+            }
+
+            public String getMessageHash() {
+                return messageHash;
+            }
+
 }
-
-
-
-
