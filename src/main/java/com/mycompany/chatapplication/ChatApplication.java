@@ -61,6 +61,7 @@ public class ChatApplication {
                     System.out.println("1. Send Messages");
                     System.out.println("2. Show recently sent messages");
                     System.out.println("3. Quit");
+                    System.out.println("4. Stored Messages");
                     System.out.println("===Choose an option:===");
 
                     choice = input.nextInt();
@@ -117,10 +118,10 @@ public class ChatApplication {
                     if (result.equals("Message successfully stored.")) {
                         System.out.println(newMessage.storeMessage());
                         messageStore.recordMessage(newMessage, "Stored");
-                    } else if (result.equals("Message successfully sent")) {
+                    } else if (result.equals("Message successfully sent.")) {
                         System.out.println(newMessage.printMessages());
                         messageStore.recordMessage(newMessage, "Sent");
-                    } else if (result.equals("Press 0 to delete the message")) {
+                    } else if (result.equals("Press 0 to delete the message.")) {
                         System.out.println("Message disregarded.");
                         messageStore.recordMessage(newMessage, "Disregarded"); 
                     }
@@ -131,7 +132,56 @@ public class ChatApplication {
                 System.out.println("Coming Soon.");
             } else if (choice == 3) {
                 System.out.println("Goodbye!");
-            } else {
+            } else if (choice == 4) {
+                    int storedChoice = 0;
+                        while (storedChoice != 7) {
+
+                            System.out.println();
+                            System.out.println("=== STORED MESSAGES ===");
+                            System.out.println("1. Display senders and recipients");
+                            System.out.println("2. Display longest stored message");
+                            System.out.println("3. Search message by ID");
+                            System.out.println("4. Search messages by recipient");
+                            System.out.println("5. Delete message using hash");
+                            System.out.println("6. Display all stored messages");
+                            System.out.println("7. Back to main menu");
+
+                            System.out.println("Choose an option:");
+                            storedChoice = input.nextInt();
+                            input.nextLine();
+                            
+                            if (storedChoice == 1) {
+                                    System.out.println(messageStore.displayStoredSendersAndRecipients());
+                                }
+                            else if (storedChoice == 2) {
+                                    System.out.println(messageStore.longestStoredMessage());
+                                
+                            } else if (storedChoice == 3) {
+                                System.out.println("Enter message ID to search:");
+                                String id = input.nextLine();
+                                System.out.println(messageStore.searchByMessageID(id));
+
+                            } else if (storedChoice == 4) {
+                                System.out.println("Enter recipient cellphone number:");
+                                String recipient = input.nextLine();
+                                System.out.println(messageStore.searchByRecipient(recipient));
+
+                            } else if (storedChoice == 5) {
+                                System.out.println("Enter message hash to delete:");
+                                String hash = input.nextLine();
+                                System.out.println(messageStore.deleteByMessageHash(hash));
+
+                            } else if (storedChoice == 6) {
+                                System.out.println(messageStore.reportStoredMessages());
+
+                            } else if (storedChoice == 7) {
+                                System.out.println("Returning to main menu.");
+
+                            } else {
+                                System.out.println("Invalid option. Try again.");
+                            }
+                        }  
+             }else {
                 System.out.println("Invalid option. Try again.");
             }
         }
